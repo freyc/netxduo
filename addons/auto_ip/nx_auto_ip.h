@@ -205,7 +205,7 @@ UINT        _nxe_auto_ip_stop(NX_AUTO_IP *auto_ip_ptr);
 UINT        _nx_auto_ip_stop(NX_AUTO_IP *auto_ip_ptr);
 UINT        _nxe_auto_ip_delete(NX_AUTO_IP *auto_ip_ptr);
 UINT        _nx_auto_ip_delete(NX_AUTO_IP *auto_ip_ptr);
-VOID        _nx_auto_ip_thread_entry(ULONG auto_ip_address);
+VOID        _nx_auto_ip_thread_entry(ALIGN_TYPE auto_ip_address);
 VOID        _nx_auto_ip_conflict(NX_IP *ip_ptr, UINT interface_index, ULONG ip_address, ULONG physical_msw, ULONG physical_lsw);
 
 #endif

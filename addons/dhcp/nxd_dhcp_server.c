@@ -48,9 +48,9 @@ NX_CALLER_CHECKING_EXTERNS
 #endif                                                                                               
                                 
 /* Define the DHCP Internal Function.  */
-static VOID        _nx_dhcp_server_thread_entry(ULONG ip_instance);
-static VOID        _nx_dhcp_slow_periodic_timer_entry(ULONG info);
-static VOID        _nx_dhcp_fast_periodic_timer_entry(ULONG info); 
+static VOID        _nx_dhcp_server_thread_entry(ALIGN_TYPE ip_instance);
+static VOID        _nx_dhcp_slow_periodic_timer_entry(ALIGN_TYPE info);
+static VOID        _nx_dhcp_fast_periodic_timer_entry(ALIGN_TYPE info); 
 static UINT        _nx_dhcp_server_packet_process(NX_DHCP_SERVER *dhcp_ptr, NX_PACKET *packet_ptr);
 static UINT        _nx_dhcp_respond_to_client_message(NX_DHCP_SERVER *dhcp_ptr, NX_DHCP_CLIENT *dhcp_client_ptr);
 static UINT        _nx_dhcp_server_extract_information(NX_DHCP_SERVER *dhcp_ptr, NX_DHCP_CLIENT **dhcp_client_ptr, NX_PACKET *packet_ptr, UINT iface_index);
@@ -332,7 +332,7 @@ UINT  i, j;
 
     /* Create the DHCP processing thread.  */
     status =  tx_thread_create(&(dhcp_ptr -> nx_dhcp_server_thread), "NetX DHCP Server Thread", 
-                               _nx_dhcp_server_thread_entry, (ULONG)(ALIGN_TYPE)dhcp_ptr,
+                               _nx_dhcp_server_thread_entry, (ALIGN_TYPE)dhcp_ptr,
                                stack_ptr, stack_size, NX_DHCP_SERVER_THREAD_PRIORITY, 
                                NX_DHCP_SERVER_THREAD_PRIORITY, 1, TX_DONT_START);
 
@@ -372,7 +372,7 @@ UINT  i, j;
     /* Create the timer for Client DHCP session. This will keep track of when leases expire 
        and when a client session has timed out. */
     status = tx_timer_create(&(dhcp_ptr -> nx_dhcp_slow_periodic_timer), "DHCP Server IP Lease Timer", 
-                             _nx_dhcp_slow_periodic_timer_entry, (ULONG)(ALIGN_TYPE)dhcp_ptr, 
+                             _nx_dhcp_slow_periodic_timer_entry, (ALIGN_TYPE)dhcp_ptr, 
                              timer_ticks, timer_ticks, TX_NO_ACTIVATE);
 
     NX_TIMER_EXTENSION_PTR_SET(&(dhcp_ptr -> nx_dhcp_slow_periodic_timer), dhcp_ptr)
@@ -383,7 +383,7 @@ UINT  i, j;
     /* Create the timer for Client DHCP session. This will keep track of when leases expire 
        and when a client session has timed out. */
     status += tx_timer_create(&(dhcp_ptr -> nx_dhcp_fast_periodic_timer), "DHCP Server Session Timer", 
-                              _nx_dhcp_fast_periodic_timer_entry, (ULONG)(ALIGN_TYPE)dhcp_ptr, 
+                              _nx_dhcp_fast_periodic_timer_entry, (ALIGN_TYPE)dhcp_ptr, 
                               timer_ticks, timer_ticks, TX_NO_ACTIVATE);
 
     NX_TIMER_EXTENSION_PTR_SET(&(dhcp_ptr -> nx_dhcp_fast_periodic_timer), dhcp_ptr)
@@ -481,7 +481,7 @@ UINT  i, j;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID  _nx_dhcp_fast_periodic_timer_entry(ULONG info)
+static VOID  _nx_dhcp_fast_periodic_timer_entry(ALIGN_TYPE info)
 {
 
 NX_DHCP_SERVER   *dhcp_ptr;
@@ -538,7 +538,7 @@ NX_DHCP_SERVER   *dhcp_ptr;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID  _nx_dhcp_slow_periodic_timer_entry(ULONG info)
+static VOID  _nx_dhcp_slow_periodic_timer_entry(ALIGN_TYPE info)
 {
 
 NX_DHCP_SERVER                  *dhcp_ptr;
@@ -1530,7 +1530,7 @@ UINT    current_preemption;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID  _nx_dhcp_server_thread_entry(ULONG info)
+static VOID  _nx_dhcp_server_thread_entry(ALIGN_TYPE info)
 {
 
 NX_DHCP_SERVER                  *dhcp_ptr;

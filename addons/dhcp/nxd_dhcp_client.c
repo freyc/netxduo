@@ -40,7 +40,7 @@
 
                                
 /* Define the DHCP Internal Function.  */
-static VOID        _nx_dhcp_thread_entry(ULONG ip_instance);
+static VOID        _nx_dhcp_thread_entry(ALIGN_TYPE ip_instance);
 static UINT        _nx_dhcp_extract_information(NX_DHCP *dhcp_ptr, NX_DHCP_INTERFACE_RECORD *interface_record, UCHAR *dhcp_message, UINT length);
 static UINT        _nx_dhcp_get_option_value(UCHAR *bootp_message, UINT option, ULONG *value, UINT length);
 static UINT        _nx_dhcp_add_option_value(UCHAR *bootp_message, UINT option, UINT size, ULONG value, UINT *index);
@@ -57,7 +57,7 @@ static UINT        _nx_dhcp_client_send_with_zero_source_address(NX_DHCP *dhcp_p
 static ULONG       _nx_dhcp_add_randomize(ULONG timeout);
 static VOID        _nx_dhcp_udp_receive_notify(NX_UDP_SOCKET *socket_ptr);
 static VOID        _nx_dhcp_packet_process(NX_DHCP *dhcp_ptr, NX_DHCP_INTERFACE_RECORD *dhcp_interface, NX_PACKET *packet_ptr);
-static VOID        _nx_dhcp_timeout_entry(ULONG dhcp);
+static VOID        _nx_dhcp_timeout_entry(ALIGN_TYPE dhcp);
 static VOID        _nx_dhcp_timeout_process(NX_DHCP *dhcp_ptr);
 static UINT        _nx_dhcp_interface_record_find(NX_DHCP *dhcp_ptr, UINT iface_index, NX_DHCP_INTERFACE_RECORD **interface_record);
 
@@ -356,7 +356,7 @@ UINT    label_length = 0;
     /* Create the ThreadX activity timeout timer.  This will be used to periodically check to see if
        a client connection has gone silent and needs to be terminated.  */
     status =  tx_timer_create(&(dhcp_ptr -> nx_dhcp_timer), "DHCP Client Timer", _nx_dhcp_timeout_entry,
-                              (ULONG)(ALIGN_TYPE)dhcp_ptr, (NX_DHCP_TIME_INTERVAL), 
+                              (ALIGN_TYPE)dhcp_ptr, (NX_DHCP_TIME_INTERVAL), 
                               (NX_DHCP_TIME_INTERVAL), TX_NO_ACTIVATE);
 
     NX_TIMER_EXTENSION_PTR_SET(&(dhcp_ptr -> nx_dhcp_timer), dhcp_ptr)
@@ -400,7 +400,7 @@ UINT    label_length = 0;
     }
 
     /* Create the DHCP processing thread.  */
-    status =  tx_thread_create(&(dhcp_ptr -> nx_dhcp_thread), "NetX DHCP Client", _nx_dhcp_thread_entry, (ULONG)(ALIGN_TYPE)dhcp_ptr,
+    status =  tx_thread_create(&(dhcp_ptr -> nx_dhcp_thread), "NetX DHCP Client", _nx_dhcp_thread_entry, (ALIGN_TYPE)dhcp_ptr,
                                 dhcp_ptr -> nx_dhcp_thread_stack, NX_DHCP_THREAD_STACK_SIZE, 
                                 NX_DHCP_THREAD_PRIORITY, NX_DHCP_THREAD_PRIORITY, 1, TX_DONT_START);
 
@@ -5051,7 +5051,7 @@ NX_DHCP *dhcp_ptr;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID _nx_dhcp_timeout_entry(ULONG dhcp)
+VOID _nx_dhcp_timeout_entry(ALIGN_TYPE dhcp)
 {
 
 NX_DHCP     *dhcp_ptr;
@@ -5115,7 +5115,7 @@ NX_DHCP     *dhcp_ptr;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID  _nx_dhcp_thread_entry(ULONG dhcp_instance)
+static VOID  _nx_dhcp_thread_entry(ALIGN_TYPE dhcp_instance)
 {
 
 NX_DHCP                  *dhcp_ptr;

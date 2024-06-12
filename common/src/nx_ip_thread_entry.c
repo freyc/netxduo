@@ -118,7 +118,7 @@
 /*                                            resulting in version 6.1.8  */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_ip_thread_entry(ULONG ip_ptr_value)
+VOID  _nx_ip_thread_entry(ALIGN_TYPE ip_ptr_value)
 {
 
 TX_INTERRUPT_SAVE_AREA

@@ -242,7 +242,7 @@ NX_DHCPV6_CLIENT    *dhcpv6_client_ptr;
 
     /* Create the DHCPV6 processing thread. */
     status =  tx_thread_create(&(dhcpv6_server_ptr -> nx_dhcpv6_server_thread), "NetX DHCPV6 Server", _nx_dhcpv6_server_thread_entry, 
-                               (ULONG)(ALIGN_TYPE)dhcpv6_server_ptr, stack_ptr, stack_size, 
+                               (ALIGN_TYPE)dhcpv6_server_ptr, stack_ptr, stack_size, 
                                NX_DHCPV6_SERVER_THREAD_PRIORITY, NX_DHCPV6_SERVER_THREAD_PRIORITY, 1, TX_DONT_START);
 
     NX_THREAD_EXTENSION_PTR_SET(&(dhcpv6_server_ptr -> nx_dhcpv6_server_thread), dhcpv6_server_ptr)
@@ -263,7 +263,7 @@ NX_DHCPV6_CLIENT    *dhcpv6_client_ptr;
 
     /* Create the DHCPV6 timer for keeping track of IP lease time expiration.  */
     status =  tx_timer_create(&(dhcpv6_server_ptr -> nx_dhcpv6_lease_timer), "NetX DHCPV6 Server Lease timer",
-                              _nx_dhcpv6_server_lease_timeout_entry, (ULONG)(ALIGN_TYPE)dhcpv6_server_ptr,
+                              _nx_dhcpv6_server_lease_timeout_entry, (ALIGN_TYPE)dhcpv6_server_ptr,
                               (NX_DHCPV6_IP_LEASE_TIMER_INTERVAL * NX_DHCPV6_SERVER_TICKS_PER_SECOND) , 
                               (NX_DHCPV6_IP_LEASE_TIMER_INTERVAL * NX_DHCPV6_SERVER_TICKS_PER_SECOND), 
                               TX_NO_ACTIVATE);
@@ -285,7 +285,7 @@ NX_DHCPV6_CLIENT    *dhcpv6_client_ptr;
 
     /* Create the DHCPV6 timer for keeping track of the DHCPv6 Client session time.  */
     status =  tx_timer_create(&(dhcpv6_server_ptr -> nx_dhcpv6_session_timer), "NetX DHCPV6 Session Duration timer",
-                              _nx_dhcpv6_server_session_timeout_entry, (ULONG)(ALIGN_TYPE)dhcpv6_server_ptr,
+                              _nx_dhcpv6_server_session_timeout_entry, (ALIGN_TYPE)dhcpv6_server_ptr,
                               (NX_DHCPV6_SESSION_TIMER_INTERVAL * NX_DHCPV6_SERVER_TICKS_PER_SECOND),
                               (NX_DHCPV6_SESSION_TIMER_INTERVAL * NX_DHCPV6_SERVER_TICKS_PER_SECOND), 
                               TX_NO_ACTIVATE);
@@ -2954,7 +2954,7 @@ UINT _nx_dhcpv6_server_interface_set(NX_DHCPV6_SERVER *dhcpv6_server_ptr, UINT i
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_dhcpv6_server_lease_timeout_entry(ULONG dhcpv6_server_ptr_value)
+VOID  _nx_dhcpv6_server_lease_timeout_entry(ALIGN_TYPE dhcpv6_server_ptr_value)
 {
 
 NX_DHCPV6_SERVER *dhcpv6_server_ptr;
@@ -3175,7 +3175,7 @@ UINT status;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_dhcpv6_server_session_timeout_entry(ULONG dhcpv6_server_ptr_value)
+VOID  _nx_dhcpv6_server_session_timeout_entry(ALIGN_TYPE dhcpv6_server_ptr_value)
 {
 
 NX_DHCPV6_SERVER *dhcpv6_server_ptr;
@@ -3687,7 +3687,7 @@ UINT  _nx_dhcpv6_server_suspend(NX_DHCPV6_SERVER *dhcpv6_server_ptr)
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_dhcpv6_server_thread_entry(ULONG info)
+VOID  _nx_dhcpv6_server_thread_entry(ALIGN_TYPE info)
 {
 
 UINT                    i;

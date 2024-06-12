@@ -31,12 +31,12 @@ static UINT _nx_tcpserver_relisten(NX_TCPSERVER *server_ptr);
 static VOID _nx_tcpserver_connect_present(NX_TCP_SOCKET *socket_ptr, UINT port);
 static VOID _nx_tcpserver_data_present(NX_TCP_SOCKET *socket_ptr);
 static VOID _nx_tcpserver_disconnect_present(NX_TCP_SOCKET *socket_ptr);
-static VOID _nx_tcpserver_timeout(ULONG tcpserver_address);
+static VOID _nx_tcpserver_timeout(ALIGN_TYPE tcpserver_address);
 static VOID _nx_tcpserver_connect_process(NX_TCPSERVER *server_ptr);
 static VOID _nx_tcpserver_data_process(NX_TCPSERVER *server_ptr);
 static VOID _nx_tcpserver_disconnect_process(NX_TCPSERVER *server_ptr);
 static VOID _nx_tcpserver_timeout_process(NX_TCPSERVER *server_ptr);
-static VOID _nx_tcpserver_thread_entry(ULONG tcpserver_address);
+static VOID _nx_tcpserver_thread_entry(ALIGN_TYPE tcpserver_address);
 
 
 /**************************************************************************/
@@ -313,7 +313,7 @@ UINT            status;
 
     /* Create the tcpserver thread. */
     status = tx_thread_create(&server_ptr -> nx_tcpserver_thread, "TCPSERVER Thread",
-                              _nx_tcpserver_thread_entry, (ULONG)server_ptr, stack_ptr,
+                              _nx_tcpserver_thread_entry, (ALIGN_TYPE)server_ptr, stack_ptr,
                               stack_size, thread_priority, thread_priority, 
                               TX_NO_TIME_SLICE, TX_DONT_START);
 
@@ -322,7 +322,7 @@ UINT            status;
 
     /* Create the timeout timer. */
     status += tx_timer_create(&server_ptr -> nx_tcpserver_timer, "TCPSERVER Timer",
-                              _nx_tcpserver_timeout, (ULONG)server_ptr,
+                              _nx_tcpserver_timeout, (ALIGN_TYPE)server_ptr,
                               (NX_IP_PERIODIC_RATE * NX_TCPSERVER_TIMEOUT_PERIOD),
                               (NX_IP_PERIODIC_RATE * NX_TCPSERVER_TIMEOUT_PERIOD), TX_NO_ACTIVATE);
 
@@ -889,7 +889,7 @@ NX_TCPSERVER *server_ptr = socket_ptr -> nx_tcp_socket_reserved_ptr;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_tcpserver_timeout(ULONG tcpserver_address)
+static VOID _nx_tcpserver_timeout(ALIGN_TYPE tcpserver_address)
 {
 NX_TCPSERVER *server_ptr = (NX_TCPSERVER *)tcpserver_address;
 
@@ -1341,7 +1341,7 @@ NX_TCP_SESSION *session_ptr;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_tcpserver_thread_entry(ULONG tcpserver_address)
+static VOID _nx_tcpserver_thread_entry(ALIGN_TYPE tcpserver_address)
 {
 ULONG           events;
 UINT            status;

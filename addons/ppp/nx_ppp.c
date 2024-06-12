@@ -151,7 +151,7 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-void _nx_ppp_thread_entry(ULONG ppp_addr)
+void _nx_ppp_thread_entry(ALIGN_TYPE ppp_addr)
 {
 
 TX_INTERRUPT_SAVE_AREA
@@ -1916,7 +1916,7 @@ void _nx_ppp_timeout(NX_PPP *ppp_ptr)
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-void _nx_ppp_timer_entry(ULONG id)
+void _nx_ppp_timer_entry(ALIGN_TYPE id)
 {
 
 NX_PPP  *ppp_ptr;
@@ -9106,11 +9106,11 @@ NX_PPP      *tail_ptr;
 
     /* Create the PPP processing thread. Note that this thread does not run until the PPP driver is
        initialized during the IP create.  */
-    tx_thread_create(&(ppp_ptr -> nx_ppp_thread), "PPP THREAD", _nx_ppp_thread_entry, (ULONG) ppp_ptr,  
+    tx_thread_create(&(ppp_ptr -> nx_ppp_thread), "PPP THREAD", _nx_ppp_thread_entry, (ALIGN_TYPE) ppp_ptr,  
             stack_memory_ptr, stack_size, thread_priority, thread_priority, NX_PPP_THREAD_TIME_SLICE, TX_DONT_START);
 
     /* Create the PPP timeout timer.  */
-    tx_timer_create(&(ppp_ptr -> nx_ppp_timer), "PPP TIMER", _nx_ppp_timer_entry, (ULONG) ppp_ptr, NX_PPP_BASE_TIMEOUT, NX_PPP_BASE_TIMEOUT, TX_NO_ACTIVATE);
+    tx_timer_create(&(ppp_ptr -> nx_ppp_timer), "PPP TIMER", _nx_ppp_timer_entry, (ALIGN_TYPE) ppp_ptr, NX_PPP_BASE_TIMEOUT, NX_PPP_BASE_TIMEOUT, TX_NO_ACTIVATE);
 
     /* Otherwise, the PPP initialization was successful.  Place the
        PPP control block on the list of created PPP instances.  */

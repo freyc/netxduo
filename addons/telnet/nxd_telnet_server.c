@@ -191,7 +191,7 @@ UINT            status;
 
     /* Create the TELNET Server thread.  */
     status =  tx_thread_create(&(server_ptr -> nx_telnet_server_thread), "TELNET Server Thread", 
-                               _nx_telnet_server_thread_entry, (ULONG) server_ptr, stack_ptr, 
+                               _nx_telnet_server_thread_entry, (ALIGN_TYPE) server_ptr, stack_ptr, 
                                stack_size, NX_TELNET_SERVER_PRIORITY, NX_TELNET_SERVER_PRIORITY, 
                                TX_NO_TIME_SLICE, TX_DONT_START);
 
@@ -220,7 +220,7 @@ UINT            status;
     /* Create the ThreadX activity timeout timer.  This will be used to periodically check to see if 
        a client connection has gone silent and needs to be terminated.  */
     status =  tx_timer_create(&(server_ptr -> nx_telnet_server_timer), "TELNET Server Timer", 
-                              _nx_telnet_server_timeout, (ULONG) server_ptr, 
+                              _nx_telnet_server_timeout, (ALIGN_TYPE) server_ptr, 
                               (NX_IP_PERIODIC_RATE * NX_TELNET_TIMEOUT_PERIOD), 
                               (NX_IP_PERIODIC_RATE * NX_TELNET_TIMEOUT_PERIOD), TX_NO_ACTIVATE);
 
@@ -1301,7 +1301,7 @@ UINT  _nx_telnet_server_get_open_connection_count(NX_TELNET_SERVER *server_ptr, 
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_telnet_server_thread_entry(ULONG telnet_server)
+VOID  _nx_telnet_server_thread_entry(ALIGN_TYPE telnet_server)
 {
 
 NX_TELNET_SERVER        *server_ptr;
@@ -2064,7 +2064,7 @@ UINT                        offset;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_telnet_server_timeout(ULONG telnet_server_address)
+VOID  _nx_telnet_server_timeout(ALIGN_TYPE telnet_server_address)
 {
 
 NX_TELNET_SERVER   *server_ptr;

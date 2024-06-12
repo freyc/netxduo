@@ -155,12 +155,12 @@ UINT _nx_ip_raw_receive_queue_max_set(NX_IP *ip_ptr, ULONG queue_max);
 UINT _nx_ip_raw_packet_receive(NX_IP *ip_ptr, NX_PACKET **packet_ptr, ULONG wait_option);
 UINT _nxd_ip_raw_packet_source_send(NX_IP *ip_ptr, NX_PACKET *packet_ptr, NXD_ADDRESS *destination_ip, UINT address_index, ULONG protocol, UINT ttl, ULONG tos);
 VOID _nx_ip_initialize(VOID);
-VOID _nx_ip_periodic_timer_entry(ULONG ip_address);
+VOID _nx_ip_periodic_timer_entry(ALIGN_TYPE ip_address);
 VOID _nx_ip_packet_receive(NX_IP *ip_ptr, NX_PACKET *packet_ptr);
 VOID _nx_ip_packet_deferred_receive(NX_IP *ip_ptr, NX_PACKET *packet_ptr);
 UINT _nx_ip_status_check(NX_IP *ip_ptr, ULONG needed_status, ULONG *actual_status, ULONG wait_option);
 UINT _nx_ip_link_status_change_notify_set(NX_IP *ip_ptr,  VOID (*link_status_change_notify)(NX_IP *ip_ptr, UINT interface_index, UINT link_up));
-VOID _nx_ip_thread_entry(ULONG ip_ptr_value);
+VOID _nx_ip_thread_entry(ALIGN_TYPE ip_ptr_value);
 VOID _nx_ip_raw_packet_cleanup(TX_THREAD *thread_ptr NX_CLEANUP_PARAMETER);
 UINT _nx_ip_raw_packet_processing(NX_IP *ip_ptr, ULONG protocol, NX_PACKET *packet_ptr);
 UINT _nxd_ip_raw_packet_send(NX_IP *ip_ptr, NX_PACKET *packet_ptr,

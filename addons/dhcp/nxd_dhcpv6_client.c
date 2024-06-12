@@ -1251,7 +1251,7 @@ UINT  status;
 
     /* Create the DHCPV6 timer for keeping track of the IP lease's time remaining before expiration.  */
     status =  tx_timer_create(&(dhcpv6_ptr -> nx_dhcpv6_IP_lifetime_timer), "NetX DHCPV6 Client IP Lease timer",
-                              _nx_dhcpv6_IP_lifetime_timeout_entry, (ULONG)(ALIGN_TYPE)dhcpv6_ptr,
+                              _nx_dhcpv6_IP_lifetime_timeout_entry, (ALIGN_TYPE)dhcpv6_ptr,
                               (NX_DHCPV6_IP_LIFETIME_TIMER_INTERVAL * NX_DHCPV6_TICKS_PER_SECOND), 
                               (NX_DHCPV6_IP_LIFETIME_TIMER_INTERVAL * NX_DHCPV6_TICKS_PER_SECOND), 
                               TX_NO_ACTIVATE);
@@ -1281,7 +1281,7 @@ UINT  status;
 
     /* Create the DHCPV6 timer for keeping track of the DHCPv6 Client session time.  */
     status =  tx_timer_create(&(dhcpv6_ptr -> nx_dhcpv6_session_timer), "NetX DHCPV6 Client Session Duration timer",
-                             _nx_dhcpv6_session_timeout_entry, (ULONG)(ALIGN_TYPE)dhcpv6_ptr,
+                             _nx_dhcpv6_session_timeout_entry, (ALIGN_TYPE)dhcpv6_ptr,
                              (NX_DHCPV6_SESSION_TIMER_INTERVAL * NX_DHCPV6_TICKS_PER_SECOND), 
                              (NX_DHCPV6_SESSION_TIMER_INTERVAL * NX_DHCPV6_TICKS_PER_SECOND), 
                               TX_NO_ACTIVATE);
@@ -1312,7 +1312,7 @@ UINT  status;
 
     /* Create the DHCPV6 processing thread. */
     status =  tx_thread_create(&(dhcpv6_ptr -> nx_dhcpv6_thread), "NetX DHCPV6 Client", _nx_dhcpv6_thread_entry, 
-                               (ULONG)(ALIGN_TYPE)dhcpv6_ptr, stack_ptr, stack_size, 
+                               (ALIGN_TYPE)dhcpv6_ptr, stack_ptr, stack_size, 
                                NX_DHCPV6_THREAD_PRIORITY, NX_DHCPV6_THREAD_PRIORITY, 1, TX_DONT_START);
 
     NX_THREAD_EXTENSION_PTR_SET(&(dhcpv6_ptr -> nx_dhcpv6_thread), dhcpv6_ptr)
@@ -3711,7 +3711,7 @@ UINT    valid_ia_count;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_dhcpv6_IP_lifetime_timeout_entry(ULONG dhcpv6_ptr_value)
+VOID  _nx_dhcpv6_IP_lifetime_timeout_entry(ALIGN_TYPE dhcpv6_ptr_value)
 {
 
 NX_DHCPV6 *dhcpv6_ptr;
@@ -9181,7 +9181,7 @@ UINT              user_option_length;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_dhcpv6_session_timeout_entry(ULONG dhcpv6_ptr_value)
+VOID  _nx_dhcpv6_session_timeout_entry(ALIGN_TYPE dhcpv6_ptr_value)
 {    
 
 NX_DHCPV6 *dhcpv6_ptr;
@@ -10274,7 +10274,7 @@ UINT status;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_dhcpv6_thread_entry(ULONG info)
+VOID  _nx_dhcpv6_thread_entry(ALIGN_TYPE info)
 {
 
 UINT        status;

@@ -38,7 +38,7 @@
 
 /* Define the internal functions.  */
 
-static VOID _nx_rtsp_server_thread_entry(ULONG);
+static VOID _nx_rtsp_server_thread_entry(ALIGN_TYPE);
 
 static VOID _nx_rtsp_server_connect_present(NX_TCP_SOCKET *request_socket_ptr, UINT port);
 static VOID _nx_rtsp_server_connect_process(NX_RTSP_SERVER *rtsp_server_ptr);
@@ -49,7 +49,7 @@ static VOID _nx_rtsp_server_disconnect_process(NX_RTSP_SERVER *rtsp_server_ptr);
 static VOID _nx_rtsp_server_request_present(NX_TCP_SOCKET *request_socket_ptr);
 static VOID _nx_rtsp_server_request_process(NX_RTSP_SERVER *rtsp_server_ptr);
 
-static VOID _nx_rtsp_server_timeout(ULONG rtsp_server_address);
+static VOID _nx_rtsp_server_timeout(ALIGN_TYPE rtsp_server_address);
 static VOID _nx_rtsp_server_timeout_process(NX_RTSP_SERVER *rtsp_server_ptr);
 
 static UINT _nx_rtsp_server_request_receive(NX_RTSP_SERVER *rtsp_server_ptr, NX_RTSP_CLIENT *rtsp_client_ptr);
@@ -274,7 +274,7 @@ UINT status;
 
     /* Create the RTSP server thread and start the RTSP server.  */
     status = tx_thread_create(&(rtsp_server_ptr -> nx_rtsp_server_thread), server_name,
-                              _nx_rtsp_server_thread_entry, (ULONG)rtsp_server_ptr,
+                              _nx_rtsp_server_thread_entry, (ALIGN_TYPE)rtsp_server_ptr,
                               stack_ptr, stack_size, priority, priority,
                               NX_RTSP_SERVER_TIME_SLICE, TX_NO_ACTIVATE);
 
@@ -288,7 +288,7 @@ UINT status;
 
     /* Create the timeout timer.  */
     status = tx_timer_create(&(rtsp_server_ptr -> nx_rtsp_server_timer), "RTSP Server Timer",
-                             _nx_rtsp_server_timeout, (ULONG)rtsp_server_ptr,
+                             _nx_rtsp_server_timeout, (ALIGN_TYPE)rtsp_server_ptr,
                              NX_IP_PERIODIC_RATE, NX_IP_PERIODIC_RATE, TX_NO_ACTIVATE);
 
     if (status)
@@ -2178,7 +2178,7 @@ UINT _nx_rtsp_server_set_parameter_callback_set(NX_RTSP_SERVER *rtsp_server_ptr,
 /*  10-31-2023     Wenhui Xie               Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_rtsp_server_thread_entry(ULONG rtsp_server_address)
+static VOID _nx_rtsp_server_thread_entry(ALIGN_TYPE rtsp_server_address)
 {
 NX_RTSP_SERVER *rtsp_server_ptr;
 UINT            status;
@@ -4744,7 +4744,7 @@ NX_RTSP_SERVER *server_ptr;
 /*  10-31-2023     Wenhui Xie               Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_rtsp_server_timeout(ULONG rtsp_server_address)
+static VOID _nx_rtsp_server_timeout(ALIGN_TYPE rtsp_server_address)
 {
 NX_RTSP_SERVER *rtsp_server_ptr = (NX_RTSP_SERVER *)rtsp_server_address;
 

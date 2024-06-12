@@ -1022,7 +1022,7 @@ UINT        _nx_dhcpv6_client_restore_record(NX_DHCPV6 *dhcpv6_ptr, NX_DHCPV6_CL
 
 /* Define DHCPv6 Client internal functions. */
 
-VOID        _nx_dhcpv6_thread_entry(ULONG info);
+VOID        _nx_dhcpv6_thread_entry(ALIGN_TYPE info);
 VOID        _nx_dhcpv6_process(NX_DHCPV6 *dhcpv6_ptr);
 UINT        _nx_dhcpv6_request(NX_DHCPV6 *dhcpv6_ptr, UINT dhcpv6_state);
 UINT        _nx_dhcpv6_request_renew(NX_DHCPV6 *dhcpv6_ptr);
@@ -1052,8 +1052,8 @@ UINT        _nx_dhcpv6_process_server_duid(NX_DHCPV6 *dhcpv6_ptr, UCHAR *option_
 UINT        _nx_dhcpv6_process_status(NX_DHCPV6 *dhcpv6_ptr, UCHAR *option_data, UINT option_length);
 UINT        _nx_dhcpv6_process_time_zone(NX_DHCPV6 *dhcpv6_ptr, UCHAR *option_data, UINT option_length);
 UINT        _nx_dhcpv6_process_time_server(NX_DHCPV6 *dhcpv6_ptr, UCHAR *option_data, UINT option_length);
-VOID        _nx_dhcpv6_IP_lifetime_timeout_entry(ULONG dhcpv6_ptr_value);
-VOID        _nx_dhcpv6_session_timeout_entry(ULONG dhcpv6_ptr_value);
+VOID        _nx_dhcpv6_IP_lifetime_timeout_entry(ALIGN_TYPE dhcpv6_ptr_value);
+VOID        _nx_dhcpv6_session_timeout_entry(ALIGN_TYPE dhcpv6_ptr_value);
 UINT        _nx_dhcpv6_utility_get_block_option_length(UCHAR *buffer_ptr, ULONG *option, ULONG *length);
 UINT        _nx_dhcpv6_utility_get_data(UCHAR *buffer, UINT size, ULONG *value);
 INT         _nx_dhcpv6_utility_time_randomize(void);

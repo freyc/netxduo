@@ -184,7 +184,7 @@ UINT  status;
     }
 
     /* Create the AutoIP processing thread.  */
-    status =  tx_thread_create(&(auto_ip_ptr -> nx_auto_ip_thread), "NetX AutoIP", _nx_auto_ip_thread_entry, (ULONG) auto_ip_ptr,
+    status =  tx_thread_create(&(auto_ip_ptr -> nx_auto_ip_thread), "NetX AutoIP", _nx_auto_ip_thread_entry, (ALIGN_TYPE) auto_ip_ptr,
                         stack_ptr, stack_size, priority, priority, 1, TX_DONT_START);
 
     /* Determine if the thread creation was successful.  */
@@ -905,7 +905,7 @@ NX_IP       *ip_ptr;
 /*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_auto_ip_thread_entry(ULONG auto_ip_ptr_info)  
+VOID  _nx_auto_ip_thread_entry(ALIGN_TYPE auto_ip_ptr_info)  
 {
 
 NX_AUTO_IP      *auto_ip_ptr;

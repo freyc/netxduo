@@ -72,7 +72,7 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID  _nx_ip_fast_periodic_timer_entry(ULONG ip_address)
+static VOID  _nx_ip_fast_periodic_timer_entry(ALIGN_TYPE ip_address)
 {
 
 NX_IP *ip_ptr;
@@ -143,7 +143,7 @@ ULONG _nx_ip_fast_timer_rate;
     /* Create the fast TCP timer.  */
     /*lint -e{923} suppress cast of pointer to ULONG.  */
     tx_timer_create(&(ip_ptr -> nx_ip_fast_periodic_timer), ip_ptr -> nx_ip_name,
-                    _nx_ip_fast_periodic_timer_entry, (ULONG)(ALIGN_TYPE)ip_ptr,
+                    _nx_ip_fast_periodic_timer_entry, (ALIGN_TYPE)ip_ptr,
                     _nx_ip_fast_timer_rate, _nx_ip_fast_timer_rate, TX_AUTO_ACTIVATE);
 
     NX_TIMER_EXTENSION_PTR_SET(&(ip_ptr -> nx_ip_fast_periodic_timer), ip_ptr)

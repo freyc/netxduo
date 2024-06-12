@@ -52,8 +52,8 @@ NX_PPPOE_CLIENT  *_nx_pppoe_client_created_ptr = NX_NULL;
 
 /* Define internal PPPoE services. */
 
-static VOID    _nx_pppoe_client_thread_entry(ULONG pppoe_client_ptr_value);
-static VOID    _nx_pppoe_client_timer_entry(ULONG pppoe_client_address);
+static VOID    _nx_pppoe_client_thread_entry(ALIGN_TYPE pppoe_client_ptr_value);
+static VOID    _nx_pppoe_client_timer_entry(ALIGN_TYPE pppoe_client_address);
 static VOID    _nx_pppoe_client_packet_receive(NX_PPPOE_CLIENT *pppoe_client_ptr, NX_PACKET *packet_ptr);
 static VOID    _nx_pppoe_client_discovery_packet_process(NX_PPPOE_CLIENT *pppoe_client_ptr, NX_PACKET *packet_ptr, ULONG server_mac_msw, ULONG server_mac_lsw);
 static VOID    _nx_pppoe_client_session_packet_process(NX_PPPOE_CLIENT *pppoe_client_ptr, NX_PACKET *packet_ptr, ULONG server_mac_msw, ULONG server_mac_lsw);
@@ -252,12 +252,12 @@ TX_INTERRUPT_SAVE_AREA
     tx_event_flags_create(&(pppoe_client_ptr -> nx_pppoe_events), "PPPoE Client EVENTS") ;
 
     /* Create the PPPoE processing thread.  */
-    tx_thread_create(&(pppoe_client_ptr -> nx_pppoe_thread), "PPPoE Client THREAD", _nx_pppoe_client_thread_entry, (ULONG) pppoe_client_ptr,  
+    tx_thread_create(&(pppoe_client_ptr -> nx_pppoe_thread), "PPPoE Client THREAD", _nx_pppoe_client_thread_entry, (ALIGN_TYPE) pppoe_client_ptr,  
                      stack_ptr, stack_size, priority, priority, NX_PPPOE_CLIENT_THREAD_TIME_SLICE, TX_AUTO_START);
 
     /* Create the PPPoE timer.  */
     tx_timer_create(&(pppoe_client_ptr -> nx_pppoe_timer), "PPPoE Client timer",
-                    (VOID (*)(ULONG))_nx_pppoe_client_timer_entry, (ULONG)pppoe_client_ptr,
+                    (VOID (*)(ALIGN_TYPE))_nx_pppoe_client_timer_entry, (ALIGN_TYPE)pppoe_client_ptr,
                     NX_IP_PERIODIC_RATE, NX_IP_PERIODIC_RATE, TX_NO_ACTIVATE);
 
     /* Otherwise, the PPPoE initialization was successful.  Place the
@@ -1766,7 +1766,7 @@ TX_INTERRUPT_SAVE_AREA
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_pppoe_client_thread_entry(ULONG pppoe_client_ptr_value)
+static VOID _nx_pppoe_client_thread_entry(ALIGN_TYPE pppoe_client_ptr_value)
 {
 
 
@@ -2029,7 +2029,7 @@ ULONG               timeout = 0;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID  _nx_pppoe_client_timer_entry(ULONG pppoe_client_address)
+static VOID  _nx_pppoe_client_timer_entry(ALIGN_TYPE pppoe_client_address)
 {
 
 NX_PPPOE_CLIENT *pppoe_client_ptr;

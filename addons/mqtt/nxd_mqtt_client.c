@@ -2859,7 +2859,7 @@ static UINT _nxd_mqtt_send_simple_message(NXD_MQTT_CLIENT *client_ptr, UCHAR hea
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nxd_mqtt_periodic_timer_entry(ULONG client)
+static VOID _nxd_mqtt_periodic_timer_entry(ALIGN_TYPE client)
 {
 /* Check if it is time to send out a ping message. */
 NXD_MQTT_CLIENT *client_ptr = (NXD_MQTT_CLIENT *)client;
@@ -3093,7 +3093,7 @@ NXD_MQTT_CLIENT *client_ptr = (NXD_MQTT_CLIENT *)mqtt_client;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nxd_mqtt_thread_entry(ULONG mqtt_client)
+static VOID _nxd_mqtt_thread_entry(ALIGN_TYPE mqtt_client)
 {
 NXD_MQTT_CLIENT *client_ptr;
 ULONG            events;
@@ -3394,7 +3394,7 @@ UINT                status;
 
     /* Now create MQTT client thread */
     status = tx_thread_create(&(client_ptr -> nxd_mqtt_thread), client_name, _nxd_mqtt_thread_entry,
-                              (ULONG)client_ptr, stack_ptr, stack_size, mqtt_thread_priority, mqtt_thread_priority,
+                              (ALIGN_TYPE)client_ptr, stack_ptr, stack_size, mqtt_thread_priority, mqtt_thread_priority,
                               NXD_MQTT_CLIENT_THREAD_TIME_SLICE, TX_DONT_START);
 
     /* Determine if an error occurred. */
@@ -4023,7 +4023,7 @@ UINT                 old_priority;
         client_ptr -> nxd_mqtt_ping_timeout = NXD_MQTT_PING_TIMEOUT_DELAY;
 
         /* Create timer */
-        tx_timer_create(&(client_ptr -> nxd_mqtt_timer), "MQTT Timer", _nxd_mqtt_periodic_timer_entry, (ULONG)client_ptr,
+        tx_timer_create(&(client_ptr -> nxd_mqtt_timer), "MQTT Timer", _nxd_mqtt_periodic_timer_entry, (ALIGN_TYPE)client_ptr,
                         client_ptr -> nxd_mqtt_timer_value, client_ptr -> nxd_mqtt_timer_value, TX_AUTO_ACTIVATE);
     }
     else

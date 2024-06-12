@@ -308,7 +308,7 @@ UINT status;
 
     /* Create the SNTP update timeout timer.  */
     status =  tx_timer_create(&client_ptr -> nx_sntp_update_timer, "SNTP Client Update Timer",
-              _nx_sntp_client_update_timeout_entry, (ULONG)client_ptr, 
+              _nx_sntp_client_update_timeout_entry, (ALIGN_TYPE)client_ptr, 
               (NX_IP_PERIODIC_RATE * NX_SNTP_UPDATE_TIMEOUT_INTERVAL), 
               (NX_IP_PERIODIC_RATE * NX_SNTP_UPDATE_TIMEOUT_INTERVAL), TX_NO_ACTIVATE);
 
@@ -361,7 +361,7 @@ UINT status;
     }
 
     /* Create the SNTP Client processing thread.  */
-    status =  tx_thread_create(&(client_ptr -> nx_sntp_client_thread), "NetX SNTP Client", _nx_sntp_client_thread_entry, (ULONG)client_ptr,
+    status =  tx_thread_create(&(client_ptr -> nx_sntp_client_thread), "NetX SNTP Client", _nx_sntp_client_thread_entry, (ALIGN_TYPE)client_ptr,
                         client_ptr -> nx_sntp_client_thread_stack, NX_SNTP_CLIENT_THREAD_STACK_SIZE, 
                         NX_SNTP_CLIENT_THREAD_PRIORITY, NX_SNTP_CLIENT_PREEMPTION_THRESHOLD, 1, TX_DONT_START);
 
@@ -582,7 +582,7 @@ UINT  _nx_sntp_client_delete(NX_SNTP_CLIENT *client_ptr)
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_sntp_client_update_timeout_entry(ULONG info)
+VOID  _nx_sntp_client_update_timeout_entry(ALIGN_TYPE info)
 {
 
 NX_SNTP_CLIENT *client_ptr;
@@ -3597,7 +3597,7 @@ ULONG   dispersion_usecs;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_sntp_client_thread_entry(ULONG sntp_instance)
+VOID  _nx_sntp_client_thread_entry(ALIGN_TYPE sntp_instance)
 {
 
 NX_SNTP_CLIENT *client_ptr;

@@ -789,12 +789,12 @@ UINT    _nx_ppp_packet_send_set(NX_PPP *ppp_ptr, VOID (*nx_ppp_packet_send)(NX_P
 #endif /* NX_PPP_PPPOE_ENABLE  */
 
 /* Define internal PPP services. */
-void    _nx_ppp_thread_entry(ULONG ppp_addr);
+void    _nx_ppp_thread_entry(ALIGN_TYPE ppp_addr);
 void    _nx_ppp_driver(NX_IP_DRIVER *driver_req_ptr);
 void    _nx_ppp_receive_packet_get(NX_PPP *ppp_ptr, NX_PACKET **return_packet_ptr);
 void    _nx_ppp_receive_packet_process(NX_PPP *ppp_ptr, NX_PACKET *packet_ptr);
 void    _nx_ppp_timeout(NX_PPP *ppp_ptr);
-void    _nx_ppp_timer_entry(ULONG id);
+void    _nx_ppp_timer_entry(ALIGN_TYPE id);
 void    _nx_ppp_netx_packet_transfer(NX_PPP *ppp_ptr, NX_PACKET *packet_ptr);
 void    _nx_ppp_process_deferred_raw_string_send(NX_PPP *ppp_ptr);
 void    _nx_ppp_process_deferred_ip_packet_send(NX_PPP *ppp_ptr);

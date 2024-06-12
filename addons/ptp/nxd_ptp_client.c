@@ -696,7 +696,7 @@ TX_INTERRUPT_SAVE_AREA
 /*  12-31-2020     Yuxin Zhou               Initial Version 6.1.3         */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_ptp_client_timer_handler(ULONG ptp_instance)
+static VOID _nx_ptp_client_timer_handler(ALIGN_TYPE ptp_instance)
 {
 NX_PTP_CLIENT *client_ptr = (NX_PTP_CLIENT *)ptp_instance;
 
@@ -3193,7 +3193,7 @@ static VOID _nx_ptp_client_process_general_packet(NX_PTP_CLIENT *client_ptr, NX_
 /*                                            resulting in version 6.4.0  */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_ptp_client_thread_entry(ULONG ptp_instance)
+static VOID _nx_ptp_client_thread_entry(ALIGN_TYPE ptp_instance)
 {
 TX_INTERRUPT_SAVE_AREA
 NX_PTP_CLIENT    *client_ptr = (NX_PTP_CLIENT *)ptp_instance;
@@ -3676,7 +3676,7 @@ UINT status;
     status = tx_timer_create(&client_ptr -> nx_ptp_client_timer,
                                 "NetX PTP Client timer",
                                 _nx_ptp_client_timer_handler,
-                                (ULONG)client_ptr,
+                                (ALIGN_TYPE)client_ptr,
                                 TX_TIMER_TICKS_PER_SECOND / NX_PTP_CLIENT_TIMER_TICKS_PER_SECOND,
                                 TX_TIMER_TICKS_PER_SECOND / NX_PTP_CLIENT_TIMER_TICKS_PER_SECOND,
                                 TX_NO_ACTIVATE);
@@ -3693,7 +3693,7 @@ UINT status;
     /* create the Client thread */
     status = tx_thread_create(&client_ptr -> nx_ptp_client_thread,
                               "NetX PTP Client", _nx_ptp_client_thread_entry,
-                              (ULONG)client_ptr, thread_stack, stack_size,
+                              (ALIGN_TYPE)client_ptr, thread_stack, stack_size,
                               thread_priority, thread_priority,
                               NX_PTP_CLIENT_THREAD_TIME_SLICE, TX_DONT_START);
     if (status != TX_SUCCESS)

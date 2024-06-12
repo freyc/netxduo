@@ -1072,7 +1072,7 @@ UINT        i;
 
     /* Now create the SNMP Server thread.  */
     status =  tx_thread_create(&(agent_ptr -> nx_snmp_agent_thread), "SNMP Agent Thread", _nx_snmp_agent_thread_entry, 
-            (ULONG) agent_ptr, stack_ptr, stack_size, NX_SNMP_AGENT_PRIORITY, NX_SNMP_AGENT_PRIORITY, 
+            (ALIGN_TYPE) agent_ptr, stack_ptr, stack_size, NX_SNMP_AGENT_PRIORITY, NX_SNMP_AGENT_PRIORITY, 
             TX_NO_TIME_SLICE, TX_DONT_START);
 
     /* Determine if an error occurred creating the thread.  */
@@ -3482,7 +3482,7 @@ UINT  _nx_snmp_agent_stop(NX_SNMP_AGENT *agent_ptr)
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_snmp_agent_thread_entry(ULONG snmp_agent_address)
+VOID  _nx_snmp_agent_thread_entry(ALIGN_TYPE snmp_agent_address)
 {
 
 NX_SNMP_AGENT           *agent_ptr;

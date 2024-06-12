@@ -334,14 +334,14 @@ UINT    _nx_telnet_server_get_open_connection_count(NX_TELNET_SERVER *server_ptr
 
 /* Define internal TELNET functions.  */
 
-VOID    _nx_telnet_server_thread_entry(ULONG telnet_server);
+VOID    _nx_telnet_server_thread_entry(ALIGN_TYPE telnet_server);
 VOID    _nx_telnet_server_connect_process(NX_TELNET_SERVER *server_ptr);
 VOID    _nx_telnet_server_connection_present(NX_TCP_SOCKET *socket_ptr, UINT port);
 VOID    _nx_telnet_server_disconnect_present(NX_TCP_SOCKET *socket_ptr);
 VOID    _nx_telnet_server_disconnect_process(NX_TELNET_SERVER *server_ptr);
 VOID    _nx_telnet_server_data_present(NX_TCP_SOCKET *socket_ptr);
 VOID    _nx_telnet_server_data_process(NX_TELNET_SERVER *server_ptr);
-VOID    _nx_telnet_server_timeout(ULONG telnet_server_address);
+VOID    _nx_telnet_server_timeout(ALIGN_TYPE telnet_server_address);
 VOID    _nx_telnet_server_timeout_processing(NX_TELNET_SERVER *server_ptr);
 
 #ifndef NX_TELNET_SERVER_OPTION_DISABLE

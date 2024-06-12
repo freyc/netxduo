@@ -38,8 +38,8 @@ NX_CALLER_CHECKING_EXTERNS
 
 
 /* Define the DHCP Internal Function.  */
-static VOID _nx_cloud_thread_entry(ULONG cloud_ptr_value);
-static VOID _nx_cloud_periodic_timer_entry(ULONG cloud_ptr_value);
+static VOID _nx_cloud_thread_entry(ALIGN_TYPE cloud_ptr_value);
+static VOID _nx_cloud_periodic_timer_entry(ALIGN_TYPE cloud_ptr_value);
 
 
 /**************************************************************************/
@@ -205,7 +205,7 @@ UINT old_threshold = 0;
 
     /* Create cloud helper thread. */
     status = tx_thread_create(&(cloud_ptr -> nx_cloud_thread), (CHAR*)cloud_name,
-                              _nx_cloud_thread_entry, (ULONG)cloud_ptr,
+                              _nx_cloud_thread_entry, (ALIGN_TYPE)cloud_ptr,
                               memory_ptr, memory_size, priority, priority, 1, TX_AUTO_START);
         
     /* Check status.  */
@@ -225,7 +225,7 @@ UINT old_threshold = 0;
     
     /* Create the periodic timer for cloud modules.  */
     status = tx_timer_create(&(cloud_ptr -> nx_cloud_periodic_timer), (CHAR*)cloud_name,
-                             _nx_cloud_periodic_timer_entry, (ULONG)cloud_ptr,
+                             _nx_cloud_periodic_timer_entry, (ALIGN_TYPE)cloud_ptr,
                              NX_IP_PERIODIC_RATE, NX_IP_PERIODIC_RATE, TX_AUTO_ACTIVATE);
 
     /* Check status.  */
@@ -1076,7 +1076,7 @@ ULONG           registered_event;
 /*  09-30-2020     Yuxin Zhou               Initial Version 6.1           */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_cloud_thread_entry(ULONG cloud_ptr_value)
+static VOID _nx_cloud_thread_entry(ALIGN_TYPE cloud_ptr_value)
 {
 
 TX_INTERRUPT_SAVE_AREA
@@ -1176,7 +1176,7 @@ ULONG           module_own_events;
 /*  09-30-2020     Yuxin Zhou               Initial Version 6.1           */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_cloud_periodic_timer_entry(ULONG cloud_ptr_value)
+static VOID _nx_cloud_periodic_timer_entry(ALIGN_TYPE cloud_ptr_value)
 {
 
 NX_CLOUD *cloud_ptr = (NX_CLOUD *)cloud_ptr_value;

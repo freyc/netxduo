@@ -846,7 +846,7 @@ UINT    _nxe_snmp_object_timetics_set(VOID *destination_ptr, NX_SNMP_OBJECT_DATA
 
 /* Define internal SNMP routines.  */
 
-VOID    _nx_snmp_agent_thread_entry(ULONG snmp_agent_address);
+VOID    _nx_snmp_agent_thread_entry(ALIGN_TYPE snmp_agent_address);
 UINT    _nx_snmp_utility_community_get(UCHAR *buffer_ptr, UCHAR *community_string, INT buffer_length);
 UINT    _nx_snmp_utility_community_set(UCHAR *buffer_ptr, UCHAR *community_string, UCHAR *buffer_end);
 UINT    _nx_snmp_utility_error_info_get(UCHAR *buffer_ptr, UINT *error_code, UINT *error_index, INT buffer_length);

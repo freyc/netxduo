@@ -72,7 +72,7 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_ip_periodic_timer_entry(ULONG ip_address)
+VOID  _nx_ip_periodic_timer_entry(ALIGN_TYPE ip_address)
 {
 
 NX_IP *ip_ptr;

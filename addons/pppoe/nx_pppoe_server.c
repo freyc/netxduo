@@ -50,7 +50,7 @@ NX_PPPOE_SERVER  *_nx_pppoe_server_created_ptr = NX_NULL;
 
 /* Define internal PPPoE services. */
                                                   
-static VOID    _nx_pppoe_server_thread_entry(ULONG pppoe_server_ptr_value);  
+static VOID    _nx_pppoe_server_thread_entry(ALIGN_TYPE pppoe_server_ptr_value);  
 static VOID    _nx_pppoe_server_packet_receive(NX_PPPOE_SERVER *pppoe_server_ptr, NX_PACKET *packet_ptr);
 static VOID    _nx_pppoe_server_discovery_packet_process(NX_PPPOE_SERVER *pppoe_server_ptr, NX_PACKET *packet_ptr, ULONG client_mac_msw, ULONG client_mac_lsw, UINT is_broadcast);
 static VOID    _nx_pppoe_server_session_packet_process(NX_PPPOE_SERVER *pppoe_server_ptr, NX_PACKET *packet_ptr, ULONG client_mac_msw, ULONG client_mac_lsw);
@@ -264,7 +264,7 @@ TX_INTERRUPT_SAVE_AREA
     tx_event_flags_create(&(pppoe_server_ptr -> nx_pppoe_events), "PPPoE Server EVENTS") ;
 
     /* Create the PPPoE processing thread.  */
-    tx_thread_create(&(pppoe_server_ptr -> nx_pppoe_thread), "PPPoE Server THREAD", _nx_pppoe_server_thread_entry, (ULONG) pppoe_server_ptr,  
+    tx_thread_create(&(pppoe_server_ptr -> nx_pppoe_thread), "PPPoE Server THREAD", _nx_pppoe_server_thread_entry, (ALIGN_TYPE) pppoe_server_ptr,  
                      stack_ptr, stack_size, priority, priority, NX_PPPOE_SERVER_THREAD_TIME_SLICE, TX_DONT_START);
 
     /* Otherwise, the PPPoE initialization was successful.  Place the
@@ -2017,7 +2017,7 @@ TX_INTERRUPT_SAVE_AREA
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_pppoe_server_thread_entry(ULONG pppoe_server_ptr_value)
+static VOID _nx_pppoe_server_thread_entry(ALIGN_TYPE pppoe_server_ptr_value)
 {
 
 TX_INTERRUPT_SAVE_AREA

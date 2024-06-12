@@ -64,10 +64,10 @@ static CHAR         *nx_mdns_service_types[] =
 
 /* Define the mDNS internal Function.  */
 static VOID         _nx_mdns_udp_receive_notify(NX_UDP_SOCKET *socket_ptr);
-static VOID         _nx_mdns_timer_entry(ULONG mdns_value);
+static VOID         _nx_mdns_timer_entry(ALIGN_TYPE mdns_value);
 static VOID         _nx_mdns_timer_set(NX_MDNS *mdns_ptr, NX_MDNS_RR  *record_rr, ULONG timer_count);
 static VOID         _nx_mdns_timer_event_process(NX_MDNS *mdns_ptr);
-static VOID         _nx_mdns_thread_entry(ULONG mdns_value);
+static VOID         _nx_mdns_thread_entry(ALIGN_TYPE mdns_value);
 static UINT         _nx_mdns_packet_process(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UINT interface_index);
 static UINT         _nx_mdns_packet_create(NX_MDNS *mdns_ptr, NX_PACKET **packet_ptr, UCHAR type);
 static VOID         _nx_mdns_packet_send(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UINT interface_index);
@@ -526,7 +526,7 @@ UINT    host_name_size;
 
     /* Create the mDNS processing thread.  */
     status =  tx_thread_create(&(mdns_ptr -> nx_mdns_thread), "mDNS Thread",
-                               _nx_mdns_thread_entry, (ULONG) mdns_ptr,
+                               _nx_mdns_thread_entry, (ALIGN_TYPE) mdns_ptr,
                                stack_ptr, stack_size, priority, priority, 
                                1, TX_AUTO_START);
 
@@ -550,7 +550,7 @@ UINT    host_name_size;
     
     /* Create the timer of Resource record lifetime.  */
     status =  tx_timer_create(&(mdns_ptr -> nx_mdns_timer), "mDNS Timer", 
-                              _nx_mdns_timer_entry, (ULONG) mdns_ptr, 
+                              _nx_mdns_timer_entry, (ALIGN_TYPE) mdns_ptr, 
                               0xFFFFFFFF, 0, TX_NO_ACTIVATE);
 
     /* Determine if the thread creation was successful.  */
@@ -6652,7 +6652,7 @@ NXD_IPV6_ADDRESS *ipv6_address_ptr;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID _nx_mdns_timer_entry(ULONG mdns_value)
+static VOID _nx_mdns_timer_entry(ALIGN_TYPE mdns_value)
 {
     
 NX_MDNS     *mdns_ptr;
@@ -7656,7 +7656,7 @@ static VOID _nx_mdns_ipv6_address_change_notify(NX_IP *ip_ptr, UINT method, UINT
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static VOID  _nx_mdns_thread_entry(ULONG mdns_value)
+static VOID  _nx_mdns_thread_entry(ALIGN_TYPE mdns_value)
 {
 
 NX_MDNS         *mdns_ptr;

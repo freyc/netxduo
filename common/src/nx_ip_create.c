@@ -227,7 +227,7 @@ TX_THREAD *current_thread;
     /* Create the internal IP thread for handling more processing intensive
        duties.  */
     /*lint -e{923} suppress cast of pointer to ULONG.  */
-    tx_thread_create(&(ip_ptr -> nx_ip_thread), name, _nx_ip_thread_entry, (ULONG)(ALIGN_TYPE)(ip_ptr),
+    tx_thread_create(&(ip_ptr -> nx_ip_thread), name, _nx_ip_thread_entry, (ALIGN_TYPE)(ip_ptr),
                      memory_ptr, memory_size, priority, priority, 1, TX_AUTO_START);
 
     NX_THREAD_EXTENSION_PTR_SET(&(ip_ptr -> nx_ip_thread), ip_ptr)
@@ -235,7 +235,7 @@ TX_THREAD *current_thread;
     /* Create the periodic timer for this IP instance.  */
     /*lint -e{923} suppress cast of pointer to ULONG.  */
     tx_timer_create(&(ip_ptr -> nx_ip_periodic_timer), name,
-                    _nx_ip_periodic_timer_entry, (ULONG)(ALIGN_TYPE)ip_ptr,
+                    _nx_ip_periodic_timer_entry, (ALIGN_TYPE)ip_ptr,
                     NX_IP_PERIODIC_RATE, NX_IP_PERIODIC_RATE, TX_AUTO_ACTIVATE);
 
     NX_TIMER_EXTENSION_PTR_SET(&(ip_ptr -> nx_ip_periodic_timer), ip_ptr)
