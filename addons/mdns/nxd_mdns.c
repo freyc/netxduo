@@ -259,8 +259,8 @@ UCHAR   *ptr;
         return(NX_PTR_ERROR);
     } 
     
-    /* Make sure record_buffer is 4-byte aligned. */
-    if ((((UINT)local_cache_ptr & 0x3) != 0) ||
+    /* Make sure record_buffer is 4-byte aligned. */ //TODO: check alignment on x64
+    if ((((ALIGN_TYPE)local_cache_ptr & 0x3) != 0) ||
         ((local_cache_size & 0x3) != 0))
     {
         return(NX_MDNS_CACHE_ERROR);
@@ -275,8 +275,8 @@ UCHAR   *ptr;
         return(NX_PTR_ERROR);
     } 
     
-    /* Make sure peer cache is 4-byte aligned. */
-    if ((((UINT)peer_cache_ptr & 0x3) != 0) ||
+    /* Make sure peer cache is 4-byte aligned. */ //TODO check alignment for x64
+    if ((((ALIGN_TYPE)peer_cache_ptr & 0x3) != 0) ||
         ((peer_cache_size & 0x3) != 0))
     {
         return(NX_MDNS_CACHE_ERROR);
@@ -1679,7 +1679,7 @@ UINT _nx_mdns_enable(NX_MDNS *mdns_ptr, UINT interface_index)
 UINT        status;
 
 #ifndef NX_MDNS_DISABLE_SERVER
-ULONG       *head;
+ALIGN_TYPE  *head;
 NX_MDNS_RR  *p;
 #endif /* NX_MDNS_DISABLE_SERVER */
 
@@ -1781,13 +1781,13 @@ NXD_IPV6_ADDRESS    *ipv6_address;
     /* Probing the all resource record wheneven a Multicast DNS responder starts up, waks up from sleep, receives an indication of a network interface "Link CHange" event.RFC6762, Section8, Page25.   */
     
     /* Get the header to the local buffer. */
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
 
     /* Set the pointer.  */
-    head = (ULONG*)(*head);   
+    head = (ALIGN_TYPE*)(*head);   
 
     /* Check the resource record.  */
-    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {
 
         /* Check the interface index.  */
@@ -1978,7 +1978,7 @@ UINT _nx_mdns_disable(NX_MDNS *mdns_ptr, UINT interface_index)
 
 UINT        dns_sd_size;
 UINT        i;
-ULONG       *head;
+ALIGN_TYPE  *head;
 NX_MDNS_RR  *p;
 
 
@@ -2016,13 +2016,13 @@ NX_MDNS_RR  *p;
 #ifndef NX_MDNS_DISABLE_CLIENT
 
     /* Get the local buffer head. */
-    head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
 
     /* Set the pointer.  */
-    head = (ULONG*)(*head);   
+    head = (ALIGN_TYPE*)(*head);   
 
     /* Delete all services on this interface.  */
-    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {
 
         /* Check whether the resource record is valid. */
@@ -2041,13 +2041,13 @@ NX_MDNS_RR  *p;
 #ifndef NX_MDNS_DISABLE_SERVER
 
     /* Get the local buffer head. */
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
 
     /* Set the pointer.  */
-    head = (ULONG*)(*head);   
+    head = (ALIGN_TYPE*)(*head);   
 
     /* Send the Goodbye message, RFC6762, Section10.1, Page33.  */
-    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {
 
         /* Check whether the resource record is valid. */
@@ -2435,7 +2435,7 @@ NX_MDNS_RR *srv_rr;
 NX_MDNS_RR *txt_rr;
 NX_MDNS_RR *ptr_rr;
 NX_MDNS_RR *dns_sd_rr;
-ULONG       *head;
+ALIGN_TYPE *head;
 NX_MDNS_RR  *p;
 ULONG        srv_ttl;
 ULONG        txt_ttl;
@@ -2486,11 +2486,11 @@ UINT         string_length;
     }
 
     /* Check whether the same service name exist.  */
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache; 
-    head = (ULONG*)(*head);   
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache; 
+    head = (ALIGN_TYPE*)(*head);   
 
     /* Check the resource record.  */
-    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {         
         if (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID)
             continue;
@@ -2852,7 +2852,7 @@ UINT        status;
 UINT        found;
 UINT        delete_flag;
 UINT        type_index;
-ULONG      *head;
+ALIGN_TYPE *head;
 NX_MDNS_RR *p;    
 UINT        rr_name_length;
 UINT        rr_ptr_name_length;
@@ -2879,10 +2879,10 @@ UINT        rr_ptr_name_length;
     }
 
     /* Get head. */
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
-    head = (ULONG*)(*head);
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
+    head = (ALIGN_TYPE*)(*head);
 
-    for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {   
 
         /* Clear the found value.  */
@@ -3983,7 +3983,7 @@ UINT _nx_mdns_service_query_stop(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UC
 UINT        status;
 UINT        type_index = 0;  
 UINT        query_stop = NX_FALSE;
-ULONG       *head;
+ALIGN_TYPE  *head;
 NX_MDNS_RR  *p; 
 UINT         rr_name_length;
 
@@ -4026,7 +4026,7 @@ UINT         rr_name_length;
     }
     
     /* Get the remote buffer head. */
-    head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
 
     if (!head)
     {
@@ -4039,10 +4039,10 @@ UINT         rr_name_length;
     }
     
     /* Set the pointer.  */
-    head = (ULONG*)(*head);
+    head = (ALIGN_TYPE*)(*head);
 
     /* Loop to delete query resource record.  */
-    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {
 
         /* Check the resource record state. */
@@ -4266,7 +4266,7 @@ UCHAR       *tmp_type;
 UCHAR       *tmp_domain;
 NX_MDNS_RR  *p = NX_NULL;
 NX_MDNS_RR  *p1;
-ULONG       *head, *tail;
+ALIGN_TYPE  *head, *tail;
 UCHAR       i;
 UINT        interface_index = 0;
 UINT        temp_string_length;
@@ -4337,24 +4337,24 @@ UINT        target_string_length;
         if(i == NX_MDNS_CACHE_TYPE_LOCAL)
         {
 #ifndef NX_MDNS_DISABLE_SERVER
-            head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
 #else
             continue;
 #endif /* NX_MDNS_DISABLE_SERVER */
         }
         else
         {
-            head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
         }
 
         if(head == NX_NULL)
             continue;
 
         /* Set the pointer.  */
-        tail = (ULONG*)(*head);
+        tail = (ALIGN_TYPE*)(*head);
 
         /* Check the resource record.  */
-        for(p = (NX_MDNS_RR*)((UCHAR*)(head + 1)); (ULONG*)p < tail; p++)
+        for(p = (NX_MDNS_RR*)((UCHAR*)(head + 1)); (ALIGN_TYPE*)p < tail; p++)
         {
 
             /* Check whether the resource record is valid. */
@@ -4437,7 +4437,7 @@ UINT        target_string_length;
                     {
 
                         /* Find the PTR resource record which pointer to the service.  */
-                        for(p1 = (NX_MDNS_RR*)((UCHAR*)(head + 1)); (ULONG*)p1 < tail; p1++)
+                        for(p1 = (NX_MDNS_RR*)((UCHAR*)(head + 1)); (ALIGN_TYPE*)p1 < tail; p1++)
                         {
 
                             /* Check whether the resource record is valid. */
@@ -5855,7 +5855,7 @@ static UINT _nx_mdns_rr_delete(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_rr)
 UINT        status = NX_MDNS_SUCCESS; 
 
 #ifndef NX_MDNS_DISABLE_CLIENT
-ULONG       *head;
+ALIGN_TYPE  *head;
 NX_MDNS_RR  *p;        
 #endif /* NX_MDNS_DISABLE_CLIENT */
 
@@ -5908,14 +5908,14 @@ NX_MDNS_RR  *p;
             {
 
                 /* Set the pointer.  */            
-                head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+                head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
 
                 if(head)
                 {
-                    head = (ULONG*)(*head);
+                    head = (ALIGN_TYPE*)(*head);
 
                     /* Check the remote resource record, stop the updating resource record.  */
-                    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+                    for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ULONG)); (ALIGN_TYPE*)p < head; p++)
                     {
 
                         if (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID)
@@ -6103,17 +6103,17 @@ UINT _nx_mdns_local_cache_clear(NX_MDNS *mdns_ptr)
 {
 
 UINT            status = NX_MDNS_SUCCESS;
-ULONG           *head;
+ALIGN_TYPE      *head;
 NX_MDNS_RR      *p;      
 
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
     
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
-    head = (ULONG*)(*head);
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
+    head = (ALIGN_TYPE*)(*head);
 
-    for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {   
 
         /* Delete the resource records.  */
@@ -6834,7 +6834,7 @@ static VOID _nx_mdns_timer_event_process(NX_MDNS *mdns_ptr)
  
 ULONG       event_flags = 0;
 ULONG       timer_min_count = 0xFFFFFFFF;
-ULONG       *head, *tail;
+ALIGN_TYPE  *head, *tail;
 NX_MDNS_RR  *p;
 UCHAR       i;
 
@@ -6859,7 +6859,7 @@ UINT        rr_name_length;
         if(i == NX_MDNS_CACHE_TYPE_LOCAL)
         {
 #ifndef NX_MDNS_DISABLE_SERVER
-            head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
 #else
             continue;
 #endif /* NX_MDNS_DISABLE_SERVER */
@@ -6867,7 +6867,7 @@ UINT        rr_name_length;
         else
         {
 #ifndef NX_MDNS_DISABLE_CLIENT
-            head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
 #else
             continue;
 #endif /* NX_MDNS_DISABLE_CLIENT  */
@@ -6876,10 +6876,10 @@ UINT        rr_name_length;
         if(head == NX_NULL)
             continue;
 
-        tail = (ULONG*)(*head);
+        tail = (ALIGN_TYPE*)(*head);
 
         /* Check the remote resource record lifetime.  */
-        for(p = (NX_MDNS_RR*)(head + 1); (ULONG*)p < tail; p++)
+        for(p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE*)p < tail; p++)
         {
 
             if (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID)
@@ -7062,7 +7062,7 @@ UINT        rr_name_length;
                             (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_AAAA))
                         {
 
-                            for (p1 = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p1 < tail; p1++)
+                            for (p1 = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ALIGN_TYPE*)p1 < tail; p1++)
                             {
 
                                 /* Check the state.  */
@@ -7880,7 +7880,7 @@ NX_MDNS_RR         *rr_search;
 NX_MDNS_RR          temp_resource_record;
 
 #ifndef NX_MDNS_DISABLE_SERVER
-ULONG              *head;
+ALIGN_TYPE         *head;
 NX_MDNS_RR         *p;
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
 ULONG               match_count;
@@ -8008,11 +8008,11 @@ NX_MDNS_RR         *nsec_rr;
 #endif /* NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES  */
 
                 /* Get head. */
-                head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
-                head = (ULONG*)(*head);
+                head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
+                head = (ALIGN_TYPE*)(*head);
 
                 /* Find the same record.  */
-                for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+                for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
                 {
 
                     /* Check the interface index.  */
@@ -8357,7 +8357,7 @@ static VOID    _nx_mdns_probing_send(NX_MDNS *mdns_ptr, UINT interface_index)
 
 UINT                status;
 NX_PACKET           *packet_ptr;
-ULONG               *head;
+ALIGN_TYPE          *head;
 NX_MDNS_RR          *p;
 USHORT              question_count = 0;
 USHORT              answer_count = 0;
@@ -8384,10 +8384,10 @@ UINT                rr_name_length;
     total_size = (USHORT)(packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_append_ptr);
 
     /* Set the head pointer. */
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
 
     /* Add the answer resource record.  */
-    for (p = (NX_MDNS_RR*)(head + 1); (ULONG)p < *head; p++)
+    for (p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE)p < *head; p++)
     {
 
         /* Check the interface index.  */
@@ -8422,7 +8422,7 @@ UINT                rr_name_length;
         rr_size = (USHORT)(rr_size + (name_size + 10 + p -> nx_mdns_rr_rdata_length));
 
         /* Check if need add other authority answers for this same question.  */
-        for(p1 = (NX_MDNS_RR*)(head + 1); (ULONG)p1 < *head; p1++)
+        for(p1 = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE)p1 < *head; p1++)
         {
 
             /* Check the interface index.  */
@@ -8490,7 +8490,7 @@ UINT                rr_name_length;
     }
 
     /* Add the authority answer resource record.  */
-    for (p = (NX_MDNS_RR*)(head + 1); (ULONG)p < *head; p++)
+    for (p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE)p < *head; p++)
     {
 
         /* Check the interface index.  */
@@ -8618,7 +8618,7 @@ UCHAR               resend_flag = NX_FALSE;
     head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
 
     /* Add the answer resource record.  */
-    for(p = (NX_MDNS_RR*)(head + 1); (ULONG)p < *head; p++)
+    for(p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE)p < *head; p++)
     {
 
         /* Check the interface index.  */
@@ -8769,7 +8769,7 @@ UCHAR               resend_flag = NX_FALSE;
     head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
 
     /* Add the answer resource record.  */
-    for(p = (NX_MDNS_RR*)(head + 1); (ULONG)p < *head; p++)
+    for(p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE)p < *head; p++)
     {
 
         /* Check the interface index.  */
@@ -8811,7 +8811,7 @@ UCHAR               resend_flag = NX_FALSE;
     }
 
     /* Add the additional answer resource record.  */
-    for(p = (NX_MDNS_RR*)(head + 1); (ULONG)p < *head; p++)
+    for(p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE)p < *head; p++)
     {
 
         /* Check the interface index.  */
@@ -8917,7 +8917,7 @@ static VOID    _nx_mdns_query_send(NX_MDNS *mdns_ptr, UINT interface_index)
 
 UINT                status;
 NX_PACKET           *packet_ptr;
-ULONG               *head;
+ALIGN_TYPE          *head;
 NX_MDNS_RR          *p;
 USHORT              question_count = 0;
 USHORT              answer_count = 0;
@@ -8939,10 +8939,10 @@ UINT                i;
     }
 
     /* Set the head pointer. */
-    head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
 
     /* Add the query resource record.  */
-    for(p = (NX_MDNS_RR*)(head + 1); (ULONG)p < *head; p++)
+    for(p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE)p < *head; p++)
     {
 
         /* Check the interface index.  */
@@ -8988,18 +8988,18 @@ UINT                i;
         if (i == 0)
         {
 #ifndef NX_MDNS_DISABLE_SERVER
-            head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
 #else
             continue;
 #endif /* NX_MDNS_DISABLE_SERVER  */
         }
         else
         {
-            head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
         }
 
         /* Add the peer resource code as known answer for query.  */
-        for(p = (NX_MDNS_RR*)(head + 1); (ULONG)p < *head; p++)
+        for(p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE)p < *head; p++)
         {
 
             /* Check the interface index.  */
@@ -9884,7 +9884,7 @@ UCHAR           is_present;
 NX_MDNS_RR      rr_ptr;
 NX_MDNS_RR     *insert_ptr;
 NX_MDNS_RR     *p;
-ULONG          *head;
+ALIGN_TYPE     *head;
 UCHAR          *service_name,*service_type,*service_domain;
 UINT            temp_string_length;
 UINT            rr_name_length;
@@ -10045,11 +10045,11 @@ UINT            rr_name_length;
 
         /* Step2. Process query record.  */
         /* Set the pointer.  */
-        head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
-        head = (ULONG*)(*head);
+        head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
+        head = (ALIGN_TYPE*)(*head);
 
         /* Check the remote resource record state.  */
-        for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+        for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
         {
 
             /* Check the state.  */
@@ -10692,7 +10692,7 @@ NX_IPV6_HEADER     *ipv6_header;
 static VOID    _nx_mdns_address_change_process(NX_MDNS *mdns_ptr)
 {
 
-ULONG       *head;
+ALIGN_TYPE  *head;
 NX_MDNS_RR  *p;
 UINT        i;
 
@@ -10706,16 +10706,16 @@ UINT        i;
             continue;
 
         /* Get the local buffer head. */
-        head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+        head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
 
         if (head)
         {
 
             /* Set the pointer.  */
-            head = (ULONG*)(*head);
+            head = (ALIGN_TYPE*)(*head);
 
             /* Check the resource record.  */
-            for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+            for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
             {
 
                 /* Check whether the resource record is valid. */
@@ -10814,7 +10814,7 @@ UCHAR       *name;
 UCHAR       *type = NX_NULL;
 UCHAR       *domain = NX_NULL;
 UINT        i;
-ULONG       *head;
+ALIGN_TYPE  *head;
 NX_MDNS_RR  *p; 
 UCHAR       is_host_type;
 UINT        temp_string_length;
@@ -10972,10 +10972,10 @@ UINT        rr_name_length;
     _nx_mdns_timer_set(mdns_ptr, record_rr, record_rr -> nx_mdns_rr_timer_count);
 
     /* Update the PTR/SRV data name.  */
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
-    head = (ULONG*)(*head);
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
+    head = (ALIGN_TYPE*)(*head);
 
-    for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {
         if ((((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_PTR) && (is_host_type == NX_FALSE)) ||
              ((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_SRV) && (is_host_type == NX_TRUE))) &&
@@ -11048,7 +11048,7 @@ static VOID _nx_mdns_service_change_notify_process(NX_MDNS *mdns_ptr, NX_MDNS_RR
 {
 
 UINT            notify_status = 0;
-ULONG           *head;
+ALIGN_TYPE      *head;
 NX_MDNS_RR      *p; 
 NX_MDNS_SERVICE temp_service; 
 UINT            rr_name_length;
@@ -11065,11 +11065,11 @@ UINT            rr_name_length;
         {
 
             /* Get the remote buffer head. */
-            head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
-            head = (ULONG*)(*head);
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
+            head = (ALIGN_TYPE*)(*head);
 
             /* Check the resource record.  */
-            for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+            for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
             {
 
                 /* Check whether the resource record is valid. */
@@ -11217,7 +11217,7 @@ static UINT _nx_mdns_service_addition_info_get(NX_MDNS *mdns_ptr, UCHAR *srv_nam
     
 UINT        index = 0;
 ULONG       current_time; 
-ULONG       *head, *tail;
+ALIGN_TYPE  *head, *tail;
 UCHAR       i;
 NX_MDNS_RR  *p;
 NX_MDNS_RR  *p1;
@@ -11241,7 +11241,7 @@ UINT        temp_length;
         if(i == NX_MDNS_CACHE_TYPE_LOCAL)
         {
 #ifndef NX_MDNS_DISABLE_SERVER
-            head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
 #else
             continue;
 #endif /* NX_MDNS_DISABLE_SERVER */
@@ -11249,7 +11249,7 @@ UINT        temp_length;
         else
         {
 #ifndef NX_MDNS_DISABLE_CLIENT
-            head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
 #else
             continue;
 #endif /* NX_MDNS_DISABLE_CLIENT  */
@@ -11259,10 +11259,10 @@ UINT        temp_length;
             continue;
 
         /* Set the pointer.  */
-        tail = (ULONG*)(*head);
+        tail = (ALIGN_TYPE*)(*head);
 
         /* Check the resource record.  */
-        for(p = (NX_MDNS_RR*)((UCHAR*)(head + 1)); (ULONG*)p < tail; p++)
+        for(p = (NX_MDNS_RR*)((UCHAR*)(head + 1)); (ALIGN_TYPE*)p < tail; p++)
         {
 
             /* Check whether the resource record is valid. */
@@ -11299,7 +11299,7 @@ UINT        temp_length;
                        temp_length + 1);
 
                 /* All address records (type "A" and "AAAA") named in the SRV rdata */
-                for (p1 = (NX_MDNS_RR*)((UCHAR*)(head + 1)); (ULONG*)p1 < tail; p1++)
+                for (p1 = (NX_MDNS_RR*)((UCHAR*)(head + 1)); (ALIGN_TYPE*)p1 < tail; p1++)
                 {
 
                     /* Update the elasped timer.  */
@@ -11422,8 +11422,8 @@ UINT _nx_mdns_cache_initialize(NX_MDNS *mdns_ptr, VOID *local_cache_ptr, UINT lo
                                VOID *peer_cache_ptr, UINT peer_cache_size)
 {
         
-ULONG *head;
-ULONG *tail;
+ALIGN_TYPE *head;
+ALIGN_TYPE *tail;
 
 
 #ifndef NX_MDNS_DISABLE_SERVER
@@ -11435,12 +11435,12 @@ ULONG *tail;
         memset(local_cache_ptr, 0, local_cache_size);
 
         /* Set the head. */
-        head = (ULONG*)local_cache_ptr;
-        *head = (ULONG)((ULONG*)local_cache_ptr + 1);
+        head = (ALIGN_TYPE*)local_cache_ptr;
+        *head = (ALIGN_TYPE)((ALIGN_TYPE*)local_cache_ptr + 1);
 
         /* Set the tail. */
-        tail = (ULONG*)local_cache_ptr + (local_cache_size >> 2) - 1;
-        *tail = (ULONG)tail;
+        tail = (ALIGN_TYPE*)local_cache_ptr + (local_cache_size >> 2) - 1;
+        *tail = (ALIGN_TYPE)tail;
 
         /* Record the info.  */
         mdns_ptr -> nx_mdns_local_service_cache = (UCHAR*)local_cache_ptr;
@@ -11465,12 +11465,12 @@ ULONG *tail;
         memset(peer_cache_ptr, 0, peer_cache_size);
 
         /* Set the head. */
-        head = (ULONG*)peer_cache_ptr;
-        *head = (ULONG)((ULONG*)peer_cache_ptr + 1);
+        head = (ALIGN_TYPE*)peer_cache_ptr;
+        *head = (ALIGN_TYPE)((ALIGN_TYPE*)peer_cache_ptr + 1);
 
         /* Set the tail. */
-        tail = (ULONG*)peer_cache_ptr + (peer_cache_size >> 2) - 1;
-        *tail = (ULONG)tail;
+        tail = (ALIGN_TYPE*)peer_cache_ptr + (peer_cache_size >> 2) - 1; //TODO: size-calc by bit-shifting is wrong for x64
+        *tail = (ALIGN_TYPE)tail;
 
         /* Record the info.  */
         mdns_ptr -> nx_mdns_peer_service_cache = (UCHAR*)peer_cache_ptr;
@@ -11546,8 +11546,8 @@ UINT _nx_mdns_cache_add_resource_record(NX_MDNS *mdns_ptr, UINT cache_type, NX_M
 
 UCHAR       *cache_ptr;
 UINT        cache_size;
-ULONG       *tail;
-ULONG       *head;
+ALIGN_TYPE  *tail;
+ALIGN_TYPE  *head;
 NX_MDNS_RR  *p;
 NX_MDNS_RR  *rr;
 UINT        rr_name_length;
@@ -11622,10 +11622,10 @@ ULONG       min_elapsed_time;
     }
 
     /* Get head and tail. */
-    tail = (ULONG*)cache_ptr + (cache_size >> 2) - 1;
-    tail = (ULONG*)(*tail);
-    head = (ULONG*)cache_ptr;
-    head = (ULONG*)(*head);
+    tail = (ALIGN_TYPE*)cache_ptr + (cache_size >> 2) - 1; //TODO: replace bit-shift with div
+    tail = (ALIGN_TYPE*)(*tail);
+    head = (ALIGN_TYPE*)cache_ptr;
+    head = (ALIGN_TYPE*)(*head);
 
     /* Set the pointer.  */
     rr = NX_NULL;
@@ -11679,8 +11679,8 @@ ULONG       min_elapsed_time;
                     _nx_mdns_cache_delete_resource_record(mdns_ptr, cache_type, rr);
 
                     /* Update the head.  */
-                    head = (ULONG*)cache_ptr;
-                    head = (ULONG*)(*head);
+                    head = (ALIGN_TYPE*)cache_ptr;
+                    head = (ALIGN_TYPE*)(*head);
                 }
                 else
                 {
@@ -11726,12 +11726,12 @@ ULONG       min_elapsed_time;
     if(insert_ptr != NX_NULL)
         *insert_ptr = rr;
 
-    if((ULONG*)rr >= head)
+    if((ALIGN_TYPE*)rr >= head)
     {
 
         /* Update HEAD when new record is added. */
-        head = (ULONG*)cache_ptr;
-        *head = (ULONG)(rr + 1);
+        head = (ALIGN_TYPE*)cache_ptr;
+        *head = (ALIGN_TYPE)(rr + 1);
     }
 
     return(NX_MDNS_SUCCESS);
@@ -11787,7 +11787,7 @@ UINT _nx_mdns_cache_delete_resource_record(NX_MDNS *mdns_ptr, UINT cache_type, N
 {
 
 UCHAR       *cache_ptr;
-ULONG       *head;
+ALIGN_TYPE  *head;
 
 
     /* Delete the resource record strings. */
@@ -11822,8 +11822,8 @@ ULONG       *head;
     }
     
     /* Get head. */
-    head = (ULONG*)cache_ptr;
-    head = (ULONG*)(*head);
+    head = (ALIGN_TYPE*)cache_ptr;
+    head = (ALIGN_TYPE*)(*head);
 
     /* Move HEAD if the last RR is deleted. */
     if(record_ptr == ((NX_MDNS_RR*)head - 1))
@@ -11834,7 +11834,7 @@ ULONG       *head;
             if(record_ptr < (NX_MDNS_RR*)cache_ptr)
                 break;
         }
-        *((ULONG*)cache_ptr) = (ULONG)(record_ptr + 1);
+        *((ALIGN_TYPE*)cache_ptr) = (ALIGN_TYPE)(record_ptr + 1);
     }
 
     return(NX_MDNS_SUCCESS);    
@@ -11889,7 +11889,7 @@ UINT _nx_mdns_cache_find_resource_record(NX_MDNS *mdns_ptr, UINT cache_type, NX_
 {
 
 UCHAR       *cache_ptr;
-ULONG       *head;
+ALIGN_TYPE  *head;
 NX_MDNS_RR  *p;
 UINT        same_rdata;
 
@@ -11905,11 +11905,11 @@ UINT        same_rdata;
     }
 
     /* Get head. */
-    head = (ULONG*)cache_ptr;
-    head = (ULONG*)(*head);
+    head = (ALIGN_TYPE*)cache_ptr;
+    head = (ALIGN_TYPE*)(*head);
 
     /* Find the same record.  */
-    for(p = (NX_MDNS_RR*)((UCHAR*)cache_ptr + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for(p = (NX_MDNS_RR*)((UCHAR*)cache_ptr + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {
 
         /* Check the interface index.  */
@@ -12119,8 +12119,8 @@ UINT _nx_mdns_cache_add_string(NX_MDNS *mdns_ptr, UINT cache_type, VOID *memory_
 
 UCHAR   *cache_ptr;
 UINT    cache_size;
-ULONG   *tail;
-ULONG   *head;
+ALIGN_TYPE   *tail;
+ALIGN_TYPE   *head;
 UINT    memory_len;
 UINT    used_cache_size;
 USHORT  len, cnt;
@@ -12147,11 +12147,11 @@ UCHAR   *p, *available, *start;
     }
 
     /* Get head and tail. */
-    tail = (ULONG*)cache_ptr + (cache_size >> 2) - 1;
+    tail = (ALIGN_TYPE*)cache_ptr + (cache_size >> 2) - 1; //TODO: replace bitshift with div
     p = (UCHAR*)tail;
-    tail = (ULONG*)(*tail);
-    head = (ULONG*)cache_ptr;
-    head = (ULONG*)(*head);
+    tail = (ALIGN_TYPE*)(*tail);
+    head = (ALIGN_TYPE*)cache_ptr;
+    head = (ALIGN_TYPE*)(*head);
 
     /* Calculate the amount of memory needed to store this string, including CNT and LEN fields. */
     
@@ -12249,7 +12249,7 @@ UCHAR   *p, *available, *start;
         }
         
         /* Update TAIL. */
-        *((ULONG*)cache_ptr + (cache_size >> 2) - 1) = (ULONG)(available - memory_len);
+        *((ALIGN_TYPE*)cache_ptr + (cache_size >> 2) - 1) = (ALIGN_TYPE)(available - memory_len); //TODO: bit-shift -> div
 
     }
     else if(memory_len < min_len)
@@ -12351,8 +12351,8 @@ UINT _nx_mdns_cache_delete_string(NX_MDNS *mdns_ptr, UINT cache_type, VOID *stri
 
 UCHAR   *cache_ptr;
 UINT    cache_size;
-ULONG   *tail;
-ULONG   *end;
+ALIGN_TYPE   *tail;
+ALIGN_TYPE   *end;
 USHORT  cnt;
 
 
@@ -12393,19 +12393,19 @@ USHORT  cnt;
     /* Also make the total length 4 bytes align. */
     string_len = ((string_len & 0xFFFFFFFC) + 8) & 0xFFFFFFFF;
 
-    end = (ULONG*)((UCHAR*)string_ptr + string_len);
+    end = (ALIGN_TYPE*)((UCHAR*)string_ptr + string_len);
 
     /* Get tail. */
 
     /* Validate the string table. */
-    tail = (ULONG*)cache_ptr + (cache_size >> 2) - 1;
+    tail = (ALIGN_TYPE*)cache_ptr + (cache_size >> 2) - 1; //TODO: shift -> div
     if(end > tail)
     {
 
         /* The end of string exceeds cache_ptr. */
         return(NX_MDNS_CACHE_ERROR);
     }
-    tail = (ULONG*)(*tail);
+    tail = (ALIGN_TYPE*)(*tail);
     if((UCHAR*)string_ptr < (UCHAR*)tail)
     {
 
@@ -12444,7 +12444,7 @@ USHORT  cnt;
         {
             tail = end;
         
-            while((end < ((ULONG*)cache_ptr + (cache_size >> 2) - 1)))
+            while((end < ((ALIGN_TYPE*)cache_ptr + (cache_size >> 2) - 1))) //TODO: shift -> div
             {
                 
                 /* Set the string pt and string length.  */
@@ -12464,7 +12464,7 @@ USHORT  cnt;
                     while(*((ULONG*)string_ptr) == 0)
                         string_ptr = (UCHAR*)string_ptr + 4;
                     
-                    end = (ULONG*)string_ptr + 1;
+                    end = (ALIGN_TYPE*)string_ptr + 1;
                     cnt = *((USHORT*)string_ptr);
                 }
                 else
@@ -12473,7 +12473,7 @@ USHORT  cnt;
                     /* Make the length 4 bytes align and add the length of CNT and LEN fields.  */
                     string_len = ((string_len & 0xFFFFFFFC) + 8) & 0xFFFFFFFF;
                     
-                    end = (ULONG*)((UCHAR*)string_ptr + string_len);
+                    end = (ALIGN_TYPE*)((UCHAR*)string_ptr + string_len);
                     cnt = *((USHORT*)((UCHAR*)end - 4));
                 }
                 
@@ -12483,7 +12483,7 @@ USHORT  cnt;
                 else
                     break;
             }
-            *((ULONG*)cache_ptr + (cache_size >> 2) - 1) = (ULONG)tail;
+            *((ALIGN_TYPE*)cache_ptr + (cache_size >> 2) - 1) = (ALIGN_TYPE)tail; //TODO: shift -> div
         }
     }
 
@@ -12611,11 +12611,11 @@ VOID _nx_mdns_cache_delete_rr_string(NX_MDNS *mdns_ptr, UINT cache_type, NX_MDNS
 UINT _nx_mdns_additional_resource_record_find(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_ptr)
 {
     
-ULONG           *head;
+ALIGN_TYPE      *head;
 NX_MDNS_RR      *p;
 
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
-    head = (ULONG*)(*head);
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
+    head = (ALIGN_TYPE*)(*head);
 
     /* Find the additional resource records according to the type.  */
     switch (record_ptr -> nx_mdns_rr_type )
@@ -12636,7 +12636,7 @@ NX_MDNS_RR      *p;
         {
 
             /* Find the additional resource record.  */
-            for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+            for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
             {   
 
                 /* Check the interface.  */
@@ -12687,7 +12687,7 @@ NX_MDNS_RR      *p;
                     
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
             /* Find the additional resource record.  */
-            for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+            for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
             {
 
                 /* Check the interface.  */
@@ -12764,15 +12764,15 @@ NX_MDNS_RR      *p;
 static VOID _nx_mdns_additional_a_aaaa_find(NX_MDNS *mdns_ptr, UCHAR *name, UINT interface_index)
 {
     
-ULONG           *head;
+ALIGN_TYPE      *head;
 NX_MDNS_RR      *p;
 
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
-    head = (ULONG*)(*head);
+    head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
+    head = (ALIGN_TYPE*)(*head);
 
     /* Recommends AAAA records in the additional section when responding
        to rrtype "A" queries, and vice versa. RFC6762, Section19, Page51.  */
-    for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
+    for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ALIGN_TYPE)); (ALIGN_TYPE*)p < head; p++)
     {
 
         /* Check the interface index.  */
@@ -12844,7 +12844,7 @@ static UINT _nx_mdns_known_answer_find(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_ptr
 {
    
 UINT            status = NX_MDNS_NO_KNOWN_ANSWER;
-ULONG           *head, *tail;
+ALIGN_TYPE      *head, *tail;
 NX_MDNS_RR      *p;
 UINT            i;
 UINT            name_length;
@@ -12867,18 +12867,18 @@ UINT            cache_count = 1;
         /* Set the pointer. */
         if (i == 0)
         {
-            head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
         }
 #ifndef NX_MDNS_DISABLE_SERVER
         else
         {
-            head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
         }
 #endif /* NX_MDNS_DISABLE_SERVER  */
-        tail = (ULONG*)(*head);
+        tail = (ALIGN_TYPE*)(*head);
 
         /* Whether this mDNS message response to query. */
-        for(p = (NX_MDNS_RR*)(head + 1); (ULONG*)p < tail; p++)
+        for(p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE*)p < tail; p++)
         {
 
             /* Check the state.  */
@@ -12964,7 +12964,7 @@ UINT            cache_count = 1;
 static UINT _nx_mdns_query_check(NX_MDNS *mdns_ptr, UCHAR *name, USHORT type, UINT one_shot, NX_MDNS_RR **search_rr, UINT interface_index)
 {
     
-ULONG       *head;
+ALIGN_TYPE  *head;
 NX_MDNS_RR  *p;
 UCHAR       i;
 UCHAR       same_query = NX_FALSE;
@@ -12983,13 +12983,13 @@ UINT        name_length;
     for(i = 0; i < 2; i++)
     {
         if(i == NX_MDNS_CACHE_TYPE_LOCAL)
-            head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_local_service_cache;
         else
-            head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
+            head = (ALIGN_TYPE*)mdns_ptr -> nx_mdns_peer_service_cache;
 
         if(head)
         {
-            for(p = (NX_MDNS_RR*)(head + 1); (ULONG)p < *head; p++)
+            for(p = (NX_MDNS_RR*)(head + 1); (ALIGN_TYPE)p < *head; p++)
             {
 
                 /* Check whether the resource record is valid. */
