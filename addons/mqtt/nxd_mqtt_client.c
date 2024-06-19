@@ -1737,7 +1737,7 @@ USHORT                        transmit_packet_id;
                         return(1);
                     }
 
-                    if (4u > ((ULONG)(response_packet -> nx_packet_data_end) - (ULONG)(response_packet -> nx_packet_append_ptr)))
+                    if (4u > ((ALIGN_TYPE)(response_packet -> nx_packet_data_end) - (ALIGN_TYPE)(response_packet -> nx_packet_append_ptr)))
                     {
                         nx_packet_release(response_packet);
 
@@ -5180,7 +5180,7 @@ UCHAR     *byte;
         return(NXD_MQTT_INTERNAL_ERROR);
     }
 
-    if (2u > ((ULONG)(packet_ptr -> nx_packet_data_end) - (ULONG)(packet_ptr -> nx_packet_append_ptr)))
+    if (2u > ((ALIGN_TYPE)(packet_ptr -> nx_packet_data_end) - (ALIGN_TYPE)(packet_ptr -> nx_packet_append_ptr)))
     {
         nx_packet_release(packet_ptr);
 

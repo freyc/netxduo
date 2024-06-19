@@ -1373,7 +1373,7 @@ UINT         packet_type;
             *item_size = strtoul(argument, NULL, 10);
         }
 
-        while (((ULONG)buffer < ((ULONG)recv_packet_ptr -> nx_packet_append_ptr - 1)) &&
+        while (((ALIGN_TYPE)buffer < ((ALIGN_TYPE)recv_packet_ptr -> nx_packet_append_ptr - 1)) &&
                ((*buffer != 0x0D) || (*(buffer + 1) != 0x0A)))
         {
             buffer++;
@@ -1389,7 +1389,7 @@ UINT         packet_type;
         {
             client_ptr -> nx_pop3_client_message_ptr = recv_packet_ptr;
             recv_packet_ptr -> nx_packet_length -=
-                (ULONG)buffer - (ULONG)recv_packet_ptr -> nx_packet_prepend_ptr;
+                (ALIGN_TYPE)buffer - (ALIGN_TYPE)recv_packet_ptr -> nx_packet_prepend_ptr;
             recv_packet_ptr -> nx_packet_prepend_ptr = (UCHAR *)buffer;
         }
 

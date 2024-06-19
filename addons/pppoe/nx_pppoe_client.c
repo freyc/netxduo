@@ -2867,7 +2867,7 @@ UINT            index = 0;
         if (pppoe_client_ptr -> nx_pppoe_service_name)
         {
 
-            if (((ULONG)(packet_ptr -> nx_packet_data_end) - (ULONG)(&work_ptr[index])) >=
+            if (((ALIGN_TYPE)(packet_ptr -> nx_packet_data_end) - (ALIGN_TYPE)(&work_ptr[index])) >=
                 (4 + pppoe_client_ptr -> nx_pppoe_service_name_length))
             {
 
@@ -2893,7 +2893,7 @@ UINT            index = 0;
         if (pppoe_client_ptr -> nx_pppoe_host_uniq)
         {
 
-            if (((ULONG)(packet_ptr -> nx_packet_data_end) - (ULONG)(&work_ptr[index])) >=
+            if (((ALIGN_TYPE)(packet_ptr -> nx_packet_data_end) - (ALIGN_TYPE)(&work_ptr[index])) >=
                 (4 + pppoe_client_ptr -> nx_pppoe_host_uniq_length))
             {
 
@@ -2917,7 +2917,7 @@ UINT            index = 0;
         if (pppoe_client_ptr -> nx_pppoe_service_name)
         {
 
-            if (((ULONG)(packet_ptr -> nx_packet_data_end) - (ULONG)(&work_ptr[index])) >=
+            if (((ALIGN_TYPE)(packet_ptr -> nx_packet_data_end) - (ALIGN_TYPE)(&work_ptr[index])) >=
                 (4 + pppoe_client_ptr -> nx_pppoe_service_name_length))
             {
                 
@@ -2943,7 +2943,7 @@ UINT            index = 0;
         if (pppoe_client_ptr -> nx_pppoe_host_uniq)
         {
 
-            if (((ULONG)(packet_ptr -> nx_packet_data_end) - (ULONG)(&work_ptr[index])) >=
+            if (((ALIGN_TYPE)(packet_ptr -> nx_packet_data_end) - (ALIGN_TYPE)(&work_ptr[index])) >=
                 (4 + pppoe_client_ptr -> nx_pppoe_host_uniq_length))
             {
 
